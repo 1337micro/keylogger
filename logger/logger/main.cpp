@@ -10,11 +10,20 @@ int main()
 {
 	micro1337::KeyListener* log = micro1337::KeyListener::instance();
 	while (1) {
-		if (log->isCPressed()) {
-			cout << "C\n";
-		}
-		if (log->isCtrlPressed()) {
-			cout << "Ctrl\n";
+		if (log->isCPressed() && log->isCtrlPressed()) {	
+			auto activeWindow = GetForegroundWindow();
+			OpenClipboard(activeWindow);
+			HANDLE clipboard = GetClipboardData(CF_TEXT);			
+			char* clipboardData = (char *)GlobalLock(clipboard);
+			
+
+			EmptyClipboard();
+			SetClipboardData(CF_TEXT, clipboardData);
+
+			GlobalUnlock(clipboardData);
+			
+
+			CloseClipboard();
 		}
 		Sleep(5);
 	}
